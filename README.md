@@ -2,7 +2,7 @@
 
 **Claude skills and an agent that run a first-pass third-party security review, with a built-in skeptic.** Point it at a vendor's SOC 2 report, security questionnaire and policies, plus a short intake note about what the business wants to buy, and it produces a risk tier, a control-by-control assessment mapped to NIST CSF 2.0, NIST SP 800-53 Rev. 5 and ISO/IEC 27001:2022, findings with remediation deadlines, contradictions between what the vendor claims and what the evidence shows, follow-up questions, and a recommended outcome for a human risk owner to decide on.
 
-> Built with Claude; designed, reviewed and tested by me. All sample vendors, people and documents in this repo are fictional.
+> All sample vendors, people and documents in this repo are fictional.
 
 ## Why this exists
 
