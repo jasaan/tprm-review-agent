@@ -1,0 +1,28 @@
+{
+  "vendor": "ledgerly-payroll",
+  "expected_tier": ["Tier 2", "Tier 1"],
+  "acceptable_outcomes": ["approve", "approve_with_conditions"],
+  "must_find": [
+    {
+      "id": "LP-1",
+      "description": "Purchased product is in SOC 2 scope",
+      "match_any": [],
+      "check_field": "soc2.purchased_product_in_scope",
+      "expect_value": true
+    }
+  ],
+  "must_not_find": [
+    {
+      "id": "LP-X1",
+      "description": "No critical findings: the evidence supports every key control",
+      "max_severity_count": {"critical": 0}
+    },
+    {
+      "id": "LP-X2",
+      "description": "No false MFA contradiction: MFA claim is supported by SOC 2 control AC-02 with no exceptions",
+      "section": "contradictions",
+      "match_any": ["mfa"]
+    }
+  ],
+  "min_challenges": 1
+}

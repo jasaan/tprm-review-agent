@@ -1,0 +1,94 @@
+{
+  "challenges": [
+    {
+      "id": "C1",
+      "target": "intake",
+      "refers_to": "Intake: data and access (funds movement and tax-filing authority)",
+      "challenge": "The intake lists only employee data and 'one-way sync from our HR system'. A payroll and tax-filing service with 'direct deposit' via Evergreen Bank ACH origination usually also needs company bank account and routing numbers, the EIN, authority to debit our operating account, and agent authorization to file and pay taxes. None of this is declared.",
+      "why_it_matters": "Authority to move company funds and file taxes in our name is a larger access and fraud exposure than read-only data. It could push the tier toward Tier 1 ('credentials or keys'; 'outage stops a critical business process'), and under the outcome guide high findings in a Tier 1 vendor without a committed fix lead to escalation.",
+      "ask": "requesting_team",
+      "question": "Will Ledgerly debit our operating account for net pay and tax deposits, hold our company bank details and EIN, and act as our authorized reporting agent with tax authorities? If yes, who at our company approves each funding debit, and what limits or dual approval apply?",
+      "proposed_change": "change_tier"
+    },
+    {
+      "id": "C2",
+      "target": "intake",
+      "refers_to": "Intake: 'SSO for 6 Finance and People staff' vs SOC 2 scope 'employee self-service portal'",
+      "challenge": "The SOC 2 scope includes an 'employee self-service portal', but the intake counts only 6 SSO users. If all 180 employees get portal accounts, they can likely view pay stubs and change direct-deposit bank details. SOC 2 AC-02 covers MFA for Ledgerly's own workforce, not customer end users.",
+      "why_it_matters": "Taking over an employee's account to change their direct-deposit details (payroll diversion) is a common fraud pattern. Neither end-user MFA nor verification of bank-detail changes is evidenced, so a missing finding in domain 3 or 10 may be warranted.",
+      "ask": "requesting_team",
+      "question": "Will the employee self-service portal be enabled for all 180 employees, and through what login (our SSO or Ledgerly-local passwords)? Vendor: is MFA enforced for end-user portal accounts, and are bank-account changes verified out of band and notified to the employee and to the customer admin?",
+      "proposed_change": "add_finding"
+    },
+    {
+      "id": "C3",
+      "target": "intake",
+      "refers_to": "Intake: criticality 'a manual off-cycle run is possible for one cycle'",
+      "challenge": "The purpose of the purchase is to 'replace our in-house payroll spreadsheets'. Once those spreadsheets are retired and the SSNs and bank details live only in Ledgerly, it is unclear who could run a manual payroll, from what data, and how tax-filing deadlines would be met during an outage.",
+      "why_it_matters": "The Tier 2 criticality rating depends on a workaround existing. If the workaround is not credible after migration, payroll is a process whose outage stops wage payment and statutory filings, which points to Tier 1.",
+      "ask": "requesting_team",
+      "question": "After go-live, will we keep an up-to-date offline copy of the payroll register and employee bank details sufficient to run one cycle manually? Who owns that procedure, and has it been tested? How would quarterly and annual tax filings be met if Ledgerly were unavailable at a deadline?",
+      "proposed_change": "change_tier"
+    },
+    {
+      "id": "C4",
+      "target": "intake",
+      "refers_to": "Intake: 'one-way sync from our HR system'; data volume",
+      "challenge": "The intake does not say how the sync is authenticated, which HR fields it exposes, or whether historical payroll data will be migrated. A connector token for the HR system may read far more than payroll needs, such as dependents, benefits or leave data, and migrated history plus terminated employees retained for about 4 years (PRV-2) means more than 180 records.",
+      "why_it_matters": "Data minimization and the true data types decide whether the 'not a large volume' reasoning for Tier 2 holds, and whether any health-related fields (for example leave reasons) reach the vendor.",
+      "ask": "requesting_team",
+      "question": "Does Ledgerly pull from our HR system with an API credential it stores, or do we push? Which exact fields are in scope for the connector? Will prior-year or year-to-date payroll history be migrated, and roughly how many current and former employee records will Ledgerly hold?",
+      "proposed_change": "none"
+    },
+    {
+      "id": "C5",
+      "target": "vendor",
+      "refers_to": "Questionnaire BCP-1 vs SOC 2 BC-02; draft F-06 and empty contradictions list",
+      "challenge": "BCP-1 claims 'RPO 1 hour; tested quarterly', but the only tested control is BC-02 'Daily backups; quarterly restore tests'. Daily backups cannot deliver a 1-hour RPO unless there is replication the documents don't mention, and a restore test is not an RTO/RPO test. The draft records 'no contradictions' and rates this as a low claim-only gap.",
+      "why_it_matters": "The risk-tiering rubric lists 'claim contradicted by evidence' as a high-severity example for Tier 1–2 vendors. It also affects how far other unverified claims (patch SLAs, US-only support, SSO/SCIM) can be trusted, and whether up to a day of payroll changes could be lost.",
+      "ask": "vendor",
+      "question": "What mechanism (for example continuous database replication or point-in-time recovery) supports the 1-hour RPO, given that backups are daily? Please provide the most recent test showing achieved RTO and RPO, not only a restore test.",
+      "proposed_change": "add_finding"
+    },
+    {
+      "id": "C6",
+      "target": "review",
+      "refers_to": "Domains 8 and 12 marked 'met'",
+      "challenge": "Domain 12 is 'met' solely on DPA Section 12, and domain 8's notification element on DPA Section 9, yet the draft itself states the DPA is 'still under review' and not executed. The review skill treats a 'signed contract term' as evidence; an unsigned excerpt is a proposal. Section 9's clock also starts 'after confirming' an incident, with no bound on time from detection to confirmation.",
+      "why_it_matters": "Marking these domains 'met' overstates the assurance a risk owner would read. They should be 'partially_met' until signature. The pre-signature condition already exists, so this changes statuses rather than the outcome.",
+      "ask": "reviewer",
+      "question": "Should domains 8 and 12 be 'partially_met' pending execution of the DPA? Should the follow-up questions ask the vendor to commit to a maximum time from detection to confirmation, or to notification within 72 hours of discovery?",
+      "proposed_change": "change_status"
+    },
+    {
+      "id": "C7",
+      "target": "review",
+      "refers_to": "Domain 3 (Identity and access management) marked 'met'",
+      "challenge": "The cited evidence (AC-02 MFA, AC-05 access reviews) covers Ledgerly's own workforce. Several parts of the domain are not evidenced:\n- Customer SAML SSO and SCIM (IAM-2) are 'a claim only'.\n- Timely deprovisioning of Ledgerly staff is not tested in the excerpt.\n- End-user portal authentication (see C2) is not addressed.",
+      "why_it_matters": "The review skill says a met status needs evidence that the control operates. The parts of IAM that protect our 6 admins and up to 180 employee accounts rest on claims, so 'met' overstates the position.",
+      "ask": "reviewer",
+      "question": "Can domain 3 stay 'met' when customer SSO/MFA and vendor-staff deprovisioning are not evidenced, or should it be 'partially_met', with a follow-up question asking for SOC 2 tests of joiner/mover/leaver controls (CC6.2/CC6.3)?",
+      "proposed_change": "change_status"
+    },
+    {
+      "id": "C8",
+      "target": "review",
+      "refers_to": "Findings F-01, F-02, F-03, F-04, F-05 (excerpt-only SOC 2 evidence)",
+      "challenge": "Several findings say a control is 'not evidenced' only because the reviewer saw 'selected tests' from an abridged SOC 2. A Security and Confidentiality report normally tests:\n- personnel controls (CC1.4)\n- encryption (CC6.1/CC6.7)\n- vendor management (CC9.2)\n- policy governance (CC1/CC5)\nFor example, F-04's statement that there is 'no evidence' of personnel controls may simply reflect the missing pages.",
+      "why_it_matters": "If the full report covers these controls, several findings, and conditions 2–3, should be closed rather than tracked for 12 months or imposed as post-approval conditions (too harsh). If it does not, F-01 should be resolved before signature, not 90 days after go-live with SSNs loaded (too lenient).",
+      "ask": "reviewer",
+      "question": "Was the full SOC 2 Type II report requested? Can the review be finalized against it, with F-01 through F-05 re-rated or closed based on the actual Section 4 tests?",
+      "proposed_change": "remove_finding"
+    },
+    {
+      "id": "C9",
+      "target": "review",
+      "refers_to": "SOC 2 summary: 'bridge_letter_needed': false",
+      "challenge": "The SOC 2 period ended June 30, 2026, about 4.7 months before this review. The next report (period through mid-2027) will likely not be issued for many months. The draft defers the bridge letter to the 12-month review, so nearly a year of operation would have no assurance.",
+      "why_it_matters": "The severity rubric lists 'missing bridge letter for a recent report period' as a low finding. Requesting the letter now costs little and covers the gap between the end of the audit period and go-live.",
+      "ask": "vendor",
+      "question": "Please provide a bridge (gap) letter covering July 1, 2026 to date, confirming no material changes to the Payroll Platform's control environment, and state the expected issue date of the next SOC 2 Type II report.",
+      "proposed_change": "add_finding"
+    }
+  ]
+}

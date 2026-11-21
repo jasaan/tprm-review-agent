@@ -1,0 +1,104 @@
+{
+  "challenges": [
+    {
+      "id": "C1",
+      "target": "intake",
+      "refers_to": "intake.md Integration: 'Brightpath staff will have read access to a shared reporting workspace'",
+      "challenge": "The intake does not say whose environment the 'shared reporting workspace' sits in, what else it contains, or how Brightpath staff accounts are provisioned and removed. The draft treats access as 'no privileged access to our environment (Tier 2–3 factor)' without testing this.",
+      "why_it_matters": "The tier stays Tier 1 either way. However, vendor accounts inside one of our tools would put vendor-side access under our control (CUEC 1 and our own deprovisioning). It could also expose more data than the nightly export, which would change the access description, the conditions and possibly add a finding.",
+      "ask": "requesting_team",
+      "question": "Is the shared reporting workspace hosted in our environment (for example our BI tool or SharePoint) or in Brightpath's? Which datasets beyond the Insights ML output can Brightpath staff see there? Who approves and removes their accounts?",
+      "proposed_change": "none"
+    },
+    {
+      "id": "C2",
+      "target": "intake",
+      "refers_to": "intake.md Contract status / Product ('add-on'); security-overview.md 'Opt-out is available on Enterprise plans'",
+      "challenge": "Insights ML is described as an 'add-on'. The model-training opt-out exists only on Enterprise plans. The intake does not say which plan the drafted order form uses, or whether we already send patient data to the Brightpath Engagement Platform.",
+      "why_it_matters": "If the order form is not an Enterprise plan, the opt-out that F-01 and condition 2 rely on may not exist. A mandatory requirement (no secondary use of PHI) could then be unmeetable, which points to reject rather than escalate. If we are already an Engagement Platform customer, our PHI may already be in the training pipeline and with Northwind, and any existing BAA or contract would need review.",
+      "ask": "requesting_team",
+      "question": "Which Brightpath plan is in the drafted order form, and is it Enterprise? Are we a current customer of the Brightpath Engagement Platform (reminders, surveys, dashboard)? If so, since when, and under what signed BAA or contract?",
+      "proposed_change": "change_outcome"
+    },
+    {
+      "id": "C3",
+      "target": "intake",
+      "refers_to": "intake.md Business purpose 'sending targeted reminders' vs Data list and Criticality",
+      "challenge": "The intake does not say who sends the reminders. If Brightpath sends them, the reminder delivery would run through Brightpath's platform and its SMS provider Twilio. It also sends name, DOB, phone, email and ZIP for all ~400,000 patients nightly, when a no-show model may need far less.",
+      "why_it_matters": "If Brightpath sends the reminders, the in-scope Engagement Platform and Twilio are in the PHI path. Our fallback to manual reminders at 400k-patient scale would also need to be credible for the 'not critical' rating to hold. The answer also defines the minimum-necessary dataset that condition 5 depends on.",
+      "ask": "requesting_team",
+      "question": "Will reminders be sent by our scheduling system, by staff, or by Brightpath (via Twilio)? Which fields does the model need for prediction, versus fields used only to contact patients? Could the export use a pseudonymous patient key instead of name, DOB and email?",
+      "proposed_change": "none"
+    },
+    {
+      "id": "C4",
+      "target": "review",
+      "refers_to": "F-08; outcome_rationale; questions_for_requesting_team (empty)",
+      "challenge": "F-08 records our own intake misclassification as a 'high' vendor finding, and the outcome rationale counts it among 'seven high findings'. Meanwhile questions_for_requesting_team is empty, even though the intake leaves several open points: plan type, workspace, reminder path, minimum-necessary data, and confirmation that no 'pre-approval' exists. The vendor text claiming pre-approval was treated as data and ignored here as well.",
+      "why_it_matters": "The rubric's High row covers control gaps or contradictions in the vendor. Counting an internal intake error inflates the case against Brightpath and blurs who must act. Escalation is still justified by F-01 alone, so the outcome holds. But the risk owner should see vendor findings and internal corrective actions separately.",
+      "ask": "reviewer",
+      "question": "Will you move F-08 out of the vendor findings into an internal action (keeping the Tier 1 reclassification and condition 5), remove it from the high-finding count, and fill questions_for_requesting_team with the open intake questions, including confirmation that no one in Security pre-approved Brightpath?",
+      "proposed_change": "remove_finding"
+    },
+    {
+      "id": "C5",
+      "target": "review",
+      "refers_to": "F-04 and contradiction entry for questionnaire IAM-1",
+      "challenge": "The draft lists IAM-1 ('MFA is enforced for all users without exception') as contradicted by the CA-04 exception. But the questionnaire is dated October 2, 2026, after the claimed November 2025 fix, so the exception does not directly contradict a current-state claim. The real issues are that the absolute is unproven and the fix is untested.",
+      "why_it_matters": "F-04 stays High under the rubric ('SOC 2 exception on a key control'). Overstating it as a contradiction, though, adds weight to the 'contradictions undermine trust' argument in the rationale. The vendor can easily rebut that framing.",
+      "ask": "reviewer",
+      "question": "Will you reword F-04 and the IAM-1 contradiction entry? The point is that a period exception exists, the remediation is only claimed, and 'without exception' is an absolute without evidence. It should not be presented as a direct contradiction of the October 2026 answer.",
+      "proposed_change": "none"
+    },
+    {
+      "id": "C6",
+      "target": "vendor",
+      "refers_to": "F-05; questionnaire VUL-1 'Summary available under NDA'; SOC 2 VM-02",
+      "challenge": "The draft calls the pen test 'about 32 months old'. That assumes no test since March 14, 2024, but the SOC 2 only shows the most recent test as of the audit. Brightpath offered a summary under NDA that does not appear to have been requested. Separately, VM-02 passed with 'No exceptions noted' even though no test fell within the October 2024 to September 2025 period, which weakens reliance on the auditor's other 'no exceptions' results.",
+      "why_it_matters": "The rubric lists 'pen test older than 12 months' as Medium. High rests only on the 'annual' contradiction. If a 2025 or 2026 test that covers Insights ML exists, F-05 should drop to Medium and the 32-month figure should be removed. If none exists, High stands and the auditor-quality concern should be recorded.",
+      "ask": "vendor",
+      "question": "Please provide, under NDA if needed, the summary or attestation letter for every independent penetration test performed since March 14, 2024. Include dates, the testing firm, scope (does it include Insights ML?) and remediation status of critical and high findings.",
+      "proposed_change": "lower_severity"
+    },
+    {
+      "id": "C7",
+      "target": "review",
+      "refers_to": "F-09 (BAA and contract terms, medium, 90 days) vs Condition 1 (before go-live, at most 30 days)",
+      "challenge": "An executed BAA is a mandatory requirement for PHI, yet F-09 is Medium with a 90-day due date while condition 1 makes it a pre-go-live blocker. 'Brightpath has said it will sign our BAA' is an assumption. Brightpath's published practices (default cross-customer training, 24-month post-termination retention, an offshore labeler) suggest its BAA may conflict with ours on permitted uses, subcontractors and return-or-destroy.",
+      "why_it_matters": "If Brightpath will only sign its own BAA, or one carving out model training and retention, the rubric's 'mandatory requirement can't be met' applies and the outcome moves toward reject. The current severity and due date understate this and are internally inconsistent.",
+      "ask": "vendor",
+      "question": "Will you sign our BAA template without changes to the permitted-use, subcontractor and return-or-destruction clauses? If not, please send your proposed redlines.",
+      "proposed_change": "raise_severity"
+    },
+    {
+      "id": "C8",
+      "target": "review",
+      "refers_to": "Control domain 9 (Business continuity and backup), status partially_met",
+      "challenge": "Domain 9 is 'partially_met' based on SOC 2 BC-03, which covers only the out-of-scope Engagement Platform, plus questionnaire BCP-1, which is a claim. Domain 4 is marked 'not_evidenced' on the same reasoning ('Insights ML is out of scope').",
+      "why_it_matters": "The review's own rules say a questionnaire answer alone is a claim, and evidence for a different product is weak. Treating the two domains inconsistently overstates assurance for Insights ML.",
+      "ask": "reviewer",
+      "question": "Since no evidence covers Insights ML backups or restores, should domain 9 be 'not_evidenced', consistent with domain 4, with a follow-up question asking for Insights ML restore-test evidence?",
+      "proposed_change": "change_status"
+    },
+    {
+      "id": "C9",
+      "target": "vendor",
+      "refers_to": "soc2-type2-excerpt.md Section 3: Northwind Data Labeling listed for the in-scope Engagement Platform",
+      "challenge": "Insights ML is excluded from the report. Yet Northwind, which annotates 'de-identified and limited data sets used to improve predictive models', is a subservice organization of the in-scope Engagement Platform. This suggests reminder, survey and dashboard data may feed model training. The method behind 'de-identified' is not stated, and limited data sets require a data use agreement.",
+      "why_it_matters": "This bears on whether F-01 and F-02 apply to data we may already send (see C2). It also determines whether 'de-identified' meets HIPAA Safe Harbor or Expert Determination, and whether Northwind needs a subcontractor BAA or data use agreement.",
+      "ask": "vendor",
+      "question": "Which data sources feed the data sets sent to Northwind: Engagement Platform data, Insights ML data, or both? Which HIPAA de-identification method do you use (Safe Harbor or Expert Determination)? Is a data use agreement or subcontractor BAA in place with Northwind for limited data sets?",
+      "proposed_change": "none"
+    },
+    {
+      "id": "C10",
+      "target": "review",
+      "refers_to": "F-10 (SOC 2 period ended more than 13 months ago, medium)",
+      "challenge": "The draft says a subsequent report 'should be available'. But the next expected period (October 2025 to September 2026) ended only about 7 weeks before this review, and reports are commonly issued some weeks after period end. The rubric example 'Missing bridge letter for a recent report period' is Low. The report also does not cover Insights ML, so its currency partly duplicates F-03.",
+      "why_it_matters": "Rating this Medium inflates the finding count. It also implies the vendor is late with a report that may simply not be issued yet.",
+      "ask": "reviewer",
+      "question": "Should F-10 be Low, asking for a bridge letter and the expected issue date of the October 2025 to September 2026 report, with the substantive assurance gap left in F-03?",
+      "proposed_change": "lower_severity"
+    }
+  ]
+}

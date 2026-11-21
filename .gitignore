@@ -1,0 +1,10 @@
+# Generated reviews (run the agent to create them)
+output/
+# Python
+.venv/
+__pycache__/
+*.pyc
+# Secrets
+.env
+*.key
+.DS_Store
