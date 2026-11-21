@@ -1,12 +1,12 @@
-# claude-security-skills
+# tprm-review-agent
 
-**Claude skills and an agent that run a first-pass third-party security review, with a built-in skeptic.** Point it at a vendor's SOC 2 report, security questionnaire and policies, plus a short intake note about what the business wants to buy, and it produces a risk tier, a control-by-control assessment mapped to NIST CSF 2.0, NIST SP 800-53 Rev. 5 and ISO/IEC 27001:2022, findings with remediation deadlines, contradictions between what the vendor claims and what the evidence shows, follow-up questions, and a recommended outcome for a human risk owner to decide on.
+**Claude skills and an agent that run a first-pass third-party risk (TPRM) assessment of a vendor, with a built-in skeptic.** Point it at a vendor's SOC 2 report, security questionnaire and policies, plus a short intake note about what the business wants to buy, and it produces a risk tier, a control-by-control assessment mapped to NIST CSF 2.0, NIST SP 800-53 Rev. 5 and ISO/IEC 27001:2022, findings with remediation deadlines, contradictions between what the vendor claims and what the evidence shows, follow-up questions, and a recommended outcome for a human risk owner to decide on.
 
 > All sample vendors, people and documents in this repo are fictional.
 
 ## Why this exists
 
-Vendor security reviews are slow, repetitive and important. Most of an analyst's time goes to reading: finding the audit period in a 90-page SOC 2 report, checking whether the product being bought is even in scope, and noticing that the questionnaire says "MFA everywhere" while the auditor found admin accounts without it. That reading is exactly what a language model is good at, as long as the method is explicit and the output is checked.
+Third-party (vendor) risk assessments are slow, repetitive and important. Most of an analyst's time goes to reading: finding the audit period in a 90-page SOC 2 report, checking whether the product being bought is even in scope, and noticing that the questionnaire says "MFA everywhere" while the auditor found admin accounts without it. That reading is exactly what a language model is good at, as long as the method is explicit and the output is checked.
 
 I've run third-party risk programs in regulated healthcare, and automating this first pass with Claude cut my assessment time by more than 80%. This repo is a public, from-scratch version of that approach: the method is written down as skills, the output is a fixed schema, and an eval checks that the agent catches what it should.
 
@@ -14,7 +14,7 @@ I've run third-party risk programs in regulated healthcare, and automating this 
 
 ```
  intake note ─┐      1. DRAFT                2. CHALLENGE              3. RESOLVE
- SOC 2 report ─┼─►  vendor-security-review ─► skeptic-review ─────►  reviewer accepts / rejects /
+ SOC 2 report ─┼─►  tprm-vendor-risk-assessment ─► skeptic-review ─────►  reviewer accepts / rejects /
  questionnaire ┤     ├ soc2-report-reader     questions the intake,   marks "needs an answer" for
  policies/DPA ─┘     └ questionnaire-gap-check the vendor and the     every challenge ─► findings.json
                                                draft itself                             report.md
@@ -23,7 +23,7 @@ I've run third-party risk programs in regulated healthcare, and automating this 
 
 1. **Tier first.** The vendor is tiered from the intake note (data, access, criticality) before any vendor evidence is read, so a polished trust center can't talk the tier down.
 2. **Read the audit report.** The `soc2-report-reader` skill pulls out type, period, opinion, scope, exceptions, subservice organizations and the controls we must run ourselves (CUECs), and checks that the purchased product is in scope.
-3. **Assess 12 control domains.** Each is marked met, partially met, not met or not evidenced, with a citation. A questionnaire answer is treated as a claim, not evidence. Domains are modeled on SIG Lite and the CSA CAIQ and mapped to NIST and ISO controls (`skills/vendor-security-review/references/control-catalog.md`).
+3. **Assess 12 control domains.** Each is marked met, partially met, not met or not evidenced, with a citation. A questionnaire answer is treated as a claim, not evidence. Domains are modeled on SIG Lite and the CSA CAIQ and mapped to NIST and ISO controls (`skills/tprm-vendor-risk-assessment/references/control-catalog.md`).
 4. **Cross-check claims.** The `questionnaire-gap-check` skill flags every claim the evidence contradicts.
 5. **Decide.** Findings get a severity and due date from a written rubric; the outcome is approve, approve with conditions, escalate or reject, with a re-review date by tier.
 6. **Challenge it.** A separate skeptic step, with its own instructions (`skills/skeptic-review/`), questions three parties: the **requesting team** (is the data really "de-identified"? is the tool really "not critical"?), the **vendor** (do the numbers add up? what backs the absolutes?), and the **draft review** itself (does the evidence say what the draft claims? is each severity justified, in either direction?).
@@ -35,7 +35,7 @@ The agent never contacts a vendor or approves anything; it writes a report for a
 
 | Path | What it is |
 |---|---|
-| `skills/vendor-security-review/` | The main skill, with risk tiering, severity rubric, control catalog (NIST/ISO mapping) and report template |
+| `skills/tprm-vendor-risk-assessment/` | The main skill, with risk tiering, severity rubric, control catalog (NIST/ISO mapping) and report template |
 | `skills/soc2-report-reader/` | Extracts what reviewers need from a SOC 2 report |
 | `skills/questionnaire-gap-check/` | Finds contradictions between vendor claims and evidence |
 | `skills/skeptic-review/` | The "naysayer": challenges the requesting team, the vendor and the draft review |
@@ -51,12 +51,12 @@ The agent never contacts a vendor or approves anything; it writes a report for a
 The skills are linked into `.claude/skills/`, so Claude Code picks them up automatically.
 
 ```bash
-git clone https://github.com/jasaan/claude-security-skills.git
-cd claude-security-skills
+git clone https://github.com/jasaan/tprm-review-agent.git
+cd tprm-review-agent
 claude
 ```
 
-Then ask: *"Run a vendor security review on samples/vendors/brightpath-analytics."*
+Then ask: *"Run a TPRM vendor risk assessment on samples/vendors/brightpath-analytics."*
 
 ### Option 2: The agent (Claude API)
 

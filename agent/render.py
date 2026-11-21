@@ -72,7 +72,7 @@ def render(r: Review) -> str:
     out: list[str] = []
     add = out.append
 
-    add(f"# Vendor security review: {r.vendor_name} — {r.product_or_service}\n")
+    add(f"# Third-party risk assessment: {r.vendor_name} — {r.product_or_service}\n")
     add(
         f"**Review date:** {r.review_date}  **Tier:** {r.inherent_risk.tier}  "
         f"**Outcome:** {OUTCOME_LABEL[r.outcome]}  **Next review:** {r.next_review_months} months\n"

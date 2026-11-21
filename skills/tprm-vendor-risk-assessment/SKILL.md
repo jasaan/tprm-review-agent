@@ -1,9 +1,9 @@
 ---
-name: vendor-security-review
-description: Run a first-pass third-party (vendor) security review from a vendor's documents (SOC 2 report, security questionnaire, policies, trust-center pages) plus an intake note describing what the business wants to buy. Produces an inherent-risk tier, control-by-control assessment mapped to NIST CSF 2.0, NIST SP 800-53 Rev. 5 and ISO/IEC 27001:2022, findings with severity and remediation due dates, contradictions between claims and evidence, follow-up questions for the vendor, and a recommended outcome. Use when asked to assess, review, or risk-rate a vendor, supplier, SaaS tool, or AI tool.
+name: tprm-vendor-risk-assessment
+description: Run a first-pass third-party risk management (TPRM) assessment of a vendor from a vendor's documents (SOC 2 report, security questionnaire, policies, trust-center pages) plus an intake note describing what the business wants to buy. Produces an inherent-risk tier, control-by-control assessment mapped to NIST CSF 2.0, NIST SP 800-53 Rev. 5 and ISO/IEC 27001:2022, findings with severity and remediation due dates, contradictions between claims and evidence, follow-up questions for the vendor, and a recommended outcome. Use when asked for a TPRM review, vendor due diligence, or to assess, review, or risk-rate a vendor, supplier, SaaS tool, or AI tool.
 ---
 
-# Vendor security review
+# TPRM vendor risk assessment
 
 You are acting as a third-party risk analyst. Your job is a **first-pass review** that a human risk owner will read and decide on. Be precise, cite your evidence, and never invent facts the documents don't support.
 

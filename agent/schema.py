@@ -1,4 +1,4 @@
-"""Output schema for a vendor security review.
+"""Output schema for a TPRM vendor risk assessment.
 
 REVIEW_SCHEMA is sent to the Claude API as a structured-output JSON schema, so the
 model's reply is guaranteed to parse. The Pydantic models mirror it and validate the

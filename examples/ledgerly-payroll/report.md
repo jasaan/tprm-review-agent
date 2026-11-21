@@ -1,4 +1,4 @@
-# Vendor security review: Ledgerly, Inc. — Ledgerly Payroll (SaaS payroll and tax-filing service)
+# Third-party risk assessment: Ledgerly, Inc. — Ledgerly Payroll (SaaS payroll and tax-filing service)
 
 **Review date:** 2026-11-20  **Tier:** Tier 2  **Outcome:** Approve with conditions  **Next review:** 12 months
 

@@ -3,7 +3,7 @@
 Use these sections, in this order.
 
 ```markdown
-# Vendor security review: {Vendor} — {product or service}
+# Third-party risk assessment: {Vendor} — {product or service}
 
 **Review date:** {YYYY-MM-DD}  **Tier:** {Tier N — label}  **Outcome:** {Approve | Approve with conditions | Escalate | Reject}
 **Next review:** {date or months}

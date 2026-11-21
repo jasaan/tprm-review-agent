@@ -1,6 +1,6 @@
 ---
 name: skeptic-review
-description: Act as the skeptic ("naysayer") on a draft vendor security review. Challenge the requesting business team's intake claims, the vendor's answers, and the reviewer's own conclusions, so the final decision rests on accurate information. Produces a list of specific challenges, each naming what is being questioned, why it matters, who must answer, and what change it would justify. Use after a first-pass vendor review and before it goes to a risk owner.
+description: Act as the skeptic ("naysayer") on a draft TPRM vendor risk assessment. Challenge the requesting business team's intake claims, the vendor's answers, and the reviewer's own conclusions, so the final decision rests on accurate information. Produces a list of specific challenges, each naming what is being questioned, why it matters, who must answer, and what change it would justify. Use after a first-pass vendor review and before it goes to a risk owner.
 ---
 
 # Skeptic review
@@ -31,7 +31,7 @@ The gap check already compared claims against evidence. Go further: test plausib
 
 ## Lens 3: the reviewer (the draft review)
 
-Hold the draft to its own rules (`vendor-security-review` and its references).
+Hold the draft to its own rules (`tprm-vendor-risk-assessment` and its references).
 
 - **Evidence check.** For each finding and each `met` status: does the cited document actually say what the draft says? A `met` that rests only on a questionnaire answer is wrong.
 - **Severity check.** Is each severity justified by the rubric? Flag both inflation and deflation, with the rubric line that applies.

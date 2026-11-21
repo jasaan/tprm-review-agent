@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-CATALOG = Path(__file__).resolve().parent.parent / "skills/vendor-security-review/references/control-catalog.md"
+CATALOG = Path(__file__).resolve().parent.parent / "skills/tprm-vendor-risk-assessment/references/control-catalog.md"
 
 
 def _split(cell: str) -> list[str]:

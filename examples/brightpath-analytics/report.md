@@ -1,4 +1,4 @@
-# Vendor security review: Brightpath Analytics, Inc. — Brightpath Insights ML, a patient-engagement predictive analytics add-on that predicts appointment no-shows
+# Third-party risk assessment: Brightpath Analytics, Inc. — Brightpath Insights ML, a patient-engagement predictive analytics add-on that predicts appointment no-shows
 
 **Review date:** 2026-11-20  **Tier:** Tier 1  **Outcome:** Escalate  **Next review:** 12 months
 
